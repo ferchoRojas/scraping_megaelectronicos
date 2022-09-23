@@ -3,6 +3,7 @@ var fs = require("fs");
 
 async function scrap() {
 	try {
+		console.log('Abriendo puppeteer')
 		const browser = await puppeteer.launch();
 		const page = await browser.newPage();
 
@@ -11,17 +12,18 @@ async function scrap() {
         await page.goto(
             `https://www.megaeletronicos.com/py/b/celulares_c-1101_s-110101/1`
         , {timeout: 0});
-
+		
         await page.waitForSelector(".codigo");
 
 		// Obtenemos cantidad de items 
+		console.log('Obteniendo cantidad de páginas')
         const items = await page.evaluate(() => {
             return document.querySelector('.cabecera h4').textContent.match(/(\d+)/)
         })
 
 		// Como hay 12 items por página, dividimos items/12
         const qty = Math.ceil(parseInt(items[0]) / 12)
-
+		console.log('Comenzamos con la recolección de datos')
 		// Recorremos todas las páginas
 		for (let i = 1; i <= qty; i++) {
 			console.log(i,'of',qty)
